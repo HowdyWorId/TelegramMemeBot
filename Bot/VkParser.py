@@ -1,5 +1,5 @@
 from itertools import groupby
-
+import os
 import vk
 
 __all__ = ['VkGroupPostsParser']
@@ -8,7 +8,7 @@ __all__ = ['VkGroupPostsParser']
 class VkInitialize:
     def __init__(self, token):
         if token is None:
-            self.__token = 'e6577cc5e6577cc5e6577cc5ace62238d3ee657e6577cc5b99053c0e5082c4515910417'
+            self.__token = os.environ.get('VK_TOKEN')
         else:
             self.__token = token
         self._version_api = 5.126
