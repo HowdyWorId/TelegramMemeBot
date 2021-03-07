@@ -5,7 +5,7 @@ from VkParser import *
 # from Telegram_.Bot.data.DataMemes import DataMemes
 from data.DataMemes import DataMemes
 import threading
-import requests
+import requests, os
  
 # import logging
 # logger = telebot.logger
