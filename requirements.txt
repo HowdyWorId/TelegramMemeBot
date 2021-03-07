@@ -1,7 +1,7 @@
 discord.py
 logging.py
 vk
-telebot
+pyTelegramBotAPI
 requests
 regex
 bs4
