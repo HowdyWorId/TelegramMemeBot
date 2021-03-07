@@ -193,8 +193,8 @@ def handle_message(message):
 
 def start_bot():
     def start_thread_funcs():
-        thread_funcs = [threading.Thread(target=thread_parsing, args=([5])),
-                        threading.Thread(target=thread_mailing, args=([1500]))]
+        thread_funcs = [threading.Thread(target=thread_parsing, args=([100])),
+                        threading.Thread(target=thread_mailing, args=([610]))]
         return [func.start() for func in thread_funcs]
 
     bot.send_message(AUHTOR_CHAT_ID, 'online')
