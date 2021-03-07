@@ -5,7 +5,7 @@ from VkParser import *
 from Telegram_.Bot.data.DataMemes import DataMemes
 import threading
 import requests
-
+ 
 # import logging
 # logger = telebot.logger
 # telebot.logger.setLevel(logging.DEBUG)
@@ -202,7 +202,8 @@ def start_bot():
 
 
 def main():
-    start_bot()
+    print('AUF')
+#     start_bot()
 
 
 if __name__ == '__main__':
