@@ -1,0 +1,11 @@
+discord.py
+logging.py
+vk
+telebot
+requests
+regex
+bs4
+asyncio
+aiohttp
+websockets
+chardet
