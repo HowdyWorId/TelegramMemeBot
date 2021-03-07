@@ -1,10 +1,10 @@
-from random import randint
-import time
-import telebot
-from VkParser import *
-from Telegram_.Bot.data.DataMemes import DataMemes
-import threading
-import requests
+# from random import randint
+# import time
+# import telebot
+# from VkParser import *
+# from Telegram_.Bot.data.DataMemes import DataMemes
+# import threading
+# import requests
  
 # import logging
 # logger = telebot.logger
