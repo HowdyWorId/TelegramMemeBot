@@ -1,0 +1,2 @@
+groups {kakao, nestandartniememi, hayp_postironiya, gdz_7klass_perishkin}
+
