@@ -204,7 +204,7 @@ def start_bot():
 
 def main():
     print('AUF')
-#     start_bot()
+    start_bot()
 
 
 if __name__ == '__main__':
