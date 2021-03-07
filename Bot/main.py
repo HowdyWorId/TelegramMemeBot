@@ -1,8 +1,8 @@
 from random import randint
 import time
 import telebot
-from VkParser import *
-from Telegram_.Bot.data.DataMemes import DataMemes
+# from VkParser import *
+# from Telegram_.Bot.data.DataMemes import DataMemes
 import threading
 import requests
  
