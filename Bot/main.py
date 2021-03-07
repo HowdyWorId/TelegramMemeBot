@@ -12,7 +12,7 @@ import requests
 # telebot.logger.setLevel(logging.DEBUG)
 
 
-TOKEN = '1627581809:AAF5s-1uy_3PdaJJhXNpe8Un_kiybFXSoP8'
+TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = -1001414786953
 AUHTOR_CHAT_ID = 818238749
 bot = telebot.TeleBot(TOKEN, parse_mode=None)
