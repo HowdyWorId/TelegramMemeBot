@@ -24,7 +24,7 @@ class VkGroupPostsParser(VkInitialize):
 
     def get_posts(self, **filters) -> list:
         count = filters.get('count', 10)
-        atts_max = filters.get('atts_max', 1)
+        # atts_max = filters.get('atts_max', 1)
         data = []
         for group_id in self.group_ids:
             wall = self._api.wall.get(owner_id=f'-{group_id}')  # get the wall from group
@@ -32,15 +32,15 @@ class VkGroupPostsParser(VkInitialize):
             i = 0
             while i <= count + 1:
                 i += 1
-
                 item: dict = self._get_item(wall, i)
-                if item is None:
+
+                if item is None or 'attachments' not in item:
                     # i-=1
                     continue
                 else:
                     item['attachments'] = self._get_photo(item['attachments'])
+                data.append(item)
 
-                    data.append(item)
         return data
 
     def _get_group_ids(self, groups):
