@@ -6,7 +6,7 @@ __all__ = ['VkGroupPostsParser']
 
 
 class VkInitialize:
-    def __init__(self, token):
+    def __init__(self, token=None):
         if token is None:
             self.__token = os.environ.get('VK_TOKEN')
         else:
