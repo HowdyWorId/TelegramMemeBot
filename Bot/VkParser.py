@@ -16,15 +16,17 @@ class VkInitialize:
         self._api = vk.API(self._session, lang=0, v=5.126)
 
 
+
+
 class VkGroupPostsParser(VkInitialize):
-    def __init__(self, groups, token=None):
-        super().__init__(token)
+    def __init__(self, groups):
+        super().__init__()
         self.groups = groups
         self.group_ids = self._get_group_ids(groups)
 
     def get_posts(self, **filters) -> list:
         count = filters.get('count', 10)
-        # atts_max = filters.get('atts_max', 1)
+        atts_max = filters.get('atts_max', 1)
         data = []
         for group_id in self.group_ids:
             wall = self._api.wall.get(owner_id=f'-{group_id}')  # get the wall from group
@@ -39,9 +41,14 @@ class VkGroupPostsParser(VkInitialize):
                     continue
                 else:
                     item['attachments'] = self._get_photo(item['attachments'])
+                    if len(item['attachments']) > atts_max:
+                        continue
                 data.append(item)
 
         return data
+
+    # '''    def _add_post(self, item):
+    #         return Post(item)'''
 
     def _get_group_ids(self, groups):
         '''
@@ -54,7 +61,9 @@ class VkGroupPostsParser(VkInitialize):
     def _get_item(wall, n):
         def _is_valid(obj):
             if 'attachments' in obj and any(
-                    ['copyright' in obj, obj['marked_as_ads'] == 1, 'is_pinned' in obj,
+                    ['copyright' in obj,
+                     # 'copy_history' in obj,
+                     obj['marked_as_ads'] == 1, 'is_pinned' in obj,
                      'video' in obj['attachments'][0],
                      any(['audio' in i for i in obj["attachments"]], ),
                      'video' in obj]):
@@ -90,13 +99,19 @@ class AsyncVkVkGroupPostsParser(VkGroupPostsParser):
 
 
 def main():
-    lst = ['kakao', 'hayp_postironiya']
+    lst = ['hayp_postironiya']
+    # lst = ['vidoskb']
     # lst = ['gdz_7klass_perishkin']
     parser = VkGroupPostsParser(lst)
     posts = parser.get_posts(count=10)
     for p in posts:
         print(p)
-    print(parser.groups)
+    # print(posts)
+    '''
+    post1 = posts[0]
+    text = post1.text
+    photo = post1.photo
+    '''
 
 
 if __name__ == '__main__':
