@@ -37,6 +37,9 @@ def thread_parsing(t):
             print(f'Thread parsing: Error \n{tm}')
             time.sleep(10)
 
+def thread_saving(t):
+    pass
+
 def get_photo_from_link(url_photo: str, chunk_size=2):
     url = url_photo
     r = requests.get(url)
@@ -63,11 +66,17 @@ def get_posts(groups, count=10, atts_max=1) -> list:
 # Bot's funcs
 @bot.message_handler(commands=['start'])
 def start(msg):
-    rmk = types.ReplyKeyboardMarkup()
-    btns = ['/start', '/test', '/memes']
-    [rmk.add(types.KeyboardButton(btn)) for btn in btns]
-    bot.send_message(AUHTOR_CHAT_ID, '?', reply_markup=rmk)
-
+    # print(help(msg))
+    # print(help(msg.from_user))
+    if msg.chat.id == AUHTOR_CHAT_ID:
+        rmk = types.ReplyKeyboardMarkup()
+        btns = ['/start', '/test', '/memes', '/send_meme']
+        [rmk.add(types.KeyboardButton(btn)) for btn in btns]
+        # print(DataMemes().memes)
+        bot.send_message(AUHTOR_CHAT_ID, '?', reply_markup=rmk)
+    else:
+        print('someone try to message with bot...')
+        return bot.send_message(AUHTOR_CHAT_ID, 'someone try to message with bot...')
 
 @bot.message_handler(commands=['memes'])
 def get_all_memes(msg):
@@ -86,17 +95,23 @@ def get_meme_step(msg):
     try:
         i = int(msg.text)
         DataMemes.meme_to_show_index = i
-        bot.send_message(AUHTOR_CHAT_ID, str(DataMemes.memes[DataMemes.meme_to_show_index]))
+        bot.send_message(AUHTOR_CHAT_ID, text=f'{DataMemes.meme_to_show_index}/{len(DataMemes.memes)-1}\n'
+                                              f'{str(DataMemes.memes[DataMemes.meme_to_show_index])}')
         rmk = types.ReplyKeyboardMarkup()
         rmk.add('<<')
         rmk.add('>>')
         rmk.add('make it first in line')
         rmk.add('delete this meme')
-        rmk.add('back')
+        rmk.add('/memes')
         bot.send_message(AUHTOR_CHAT_ID, text='.', reply_markup=rmk)
         bot.register_next_step_handler(msg, get_meme_next_step)
+
     except ValueError:
         bot.send_message(AUHTOR_CHAT_ID, 'ooooooops')
+        start(msg)
+
+    except IndexError:
+        bot.send_message(AUHTOR_CHAT_ID, 'IndexError')
         start(msg)
 
 
@@ -105,8 +120,8 @@ def get_meme_next_step(msg):
         i = DataMemes.meme_to_show_index
 
         if msg.text == '>>':
-            if i >= len(DataMemes.memes)-1:
-                i=0
+            if i >= len(DataMemes.memes) - 1:
+                i = 0
             else:
                 i += 1
             msg.text = i
@@ -130,16 +145,17 @@ def get_meme_next_step(msg):
             bot.send_message(AUHTOR_CHAT_ID, 'was deleted')
             get_meme_step(msg)
 
-        elif msg.text == 'back':
+        elif msg.text == '/memes':
             get_all_memes(msg)
 
         else:
             start(msg)
+
     except Exception as e:
         print(e)
 
 
-@bot.message_handler(commands=['meme'])
+@bot.message_handler(commands=['send_meme'])
 def send_meme(msg):
     try:
         meme: dict = DataMemes.memes[DataMemes.cur_meme_index]
@@ -147,7 +163,7 @@ def send_meme(msg):
         DataMemes.used_memes.append(meme['date'])
         DataMemes.memes.pop(DataMemes.cur_meme_index)
 
-        bot.send_photo(CHAT_ID, get_photo_from_link(meme['attachments'][0]))
+        bot.send_photo(CHAT_ID, get_photo_from_link(meme['attachments'][0]), caption=meme['text'])
         DataMemes.cur_meme_index = 0
     except IndexError:
         return bot.send_message(AUHTOR_CHAT_ID, f'!!!NO MEMES!!!')
@@ -163,8 +179,9 @@ def del_meme(msg):
     cur_meme = DataMemes.memes[0]
     DataMemes.used_memes.append(cur_meme['date'])
     DataMemes.memes.remove(cur_meme)
-    bot.reply_to(msg, 'cur meme was delited.')
+    bot.reply_to(msg, 'cur meme was deleted.')
     return bot.send_message(AUHTOR_CHAT_ID, f'NEXT MEME:\n'
+                                            f'{DataMemes.cur_meme_index}/{len(DataMemes.memes)}'
                                             f'{DataMemes.memes[0]}')
 
 
@@ -179,22 +196,10 @@ def test(msg):
                       "THat's OK.")
     # bot.register_next_step_handler(msg, test)
 
-
-'''
-@bot.message_handler(func=lambda m: True)
-def echo_all(msg):
-    bot.reply_to(msg, msg.text)
-
-
-@bot.message_handler(regexp="ok,then")
-def handle_message(message):
-    print('detected')'''
-
-
 def start_bot():
     def start_thread_funcs():
-        thread_funcs = [threading.Thread(target=thread_parsing, args=([100])),
-                        threading.Thread(target=thread_mailing, args=([610]))]
+        thread_funcs = [threading.Thread(target=thread_parsing, args=([1000])),
+                        threading.Thread(target=thread_mailing, args=([3000]))]
         return [func.start() for func in thread_funcs]
 
     bot.send_message(AUHTOR_CHAT_ID, 'online')
@@ -203,18 +208,8 @@ def start_bot():
 
 
 def main():
-    print('AUF')
     start_bot()
 
 
 if __name__ == '__main__':
     main()
-
-    '''    # start_bot()
-        # t1 = threading.Thread(target=thread_parsing, args=([50]))
-        # t1.start()
-        # t2 = threading.Thread(target=thread_mailing, args=([150]))
-        # t2.start()
-        # while True:
-        #     time.sleep(4)
-        #     print(len(DataMemes.memes))'''
