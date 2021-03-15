@@ -13,7 +13,7 @@ import requests, os
 
 
 TOKEN = os.environ.get('BOT_TOKEN')
-CHAT_ID = -1001414786953
+CHAT_ID = -1001145695690
 AUHTOR_CHAT_ID = 818238749
 bot = telebot.TeleBot(TOKEN, parse_mode=None)
 types = telebot.types
