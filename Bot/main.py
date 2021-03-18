@@ -1,7 +1,7 @@
 from random import randint
 import time
 import telebot
-from VkParser import *
+from VkParser import *o
 # from Telegram_.Bot.data.DataMemes import DataMemes
 from data.DataMemes import DataMemes
 import threading
@@ -76,7 +76,7 @@ def start(msg):
         bot.send_message(AUHTOR_CHAT_ID, '?', reply_markup=rmk)
     else:
         print('someone try to message with bot...')
-        return bot.send_message(AUHTOR_CHAT_ID, 'someone try to message with bot...')
+        return bot.send_message(AUHTOR_CHAT_ID, f'someone try to message with bot...{msg}')
 
 @bot.message_handler(commands=['memes'])
 def get_all_memes(msg):
